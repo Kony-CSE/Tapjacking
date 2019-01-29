@@ -8,5 +8,5 @@
 
   i.e. Your workspace --> Your project 
   
-  2)Once you do step 1 everything is taken care. 
+  2) Once you do step 1 everything is taken care. 
   For your reference we have also provided a Kony project handling the Tapjacking.
