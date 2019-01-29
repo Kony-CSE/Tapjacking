@@ -1,5 +1,5 @@
   # Tapjacking
-  A Sample app to demonstrate how to handle tapjacking security threat.
+  A Kony Sample app to demonstrate how to handle tapjacking security threat.
 
   This vulnerability was surfaced again in later versions of Android i.e., 6.0.1. So, the best way to mitigate this is to write the FFI     only.
  
