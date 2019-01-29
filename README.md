@@ -5,6 +5,7 @@ If you would like to handle the Tapjacking Security exploit which made a return 
 The best way to handle is FFI. The FFI integration is automated to handle the issue.
 All you need to do is the below steps.
 1) Copy the androidprecompile task and tapjackingdontdelete folder in the root folder of the project.
+
 i.e. Your workspace --> Your project 
 
 
