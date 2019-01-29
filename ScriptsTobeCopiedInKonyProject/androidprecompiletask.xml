@@ -1,0 +1,50 @@
+<project name="PreCompile" default="PreCompileSetup">
+	<!--
+	${basedir} points to the current dir in which this xml is present
+	${konyapp.dir} points to kony application base directory
+	${app.dir} points to Native android application directory created for the current kony app
+	${packagepath} contains the package name folder path relative to src folder
+	${build.option} indicates current build is "debug" or "release" mode
+	${supportx86} is set to "true" if x86 flag is ticked in IDE build options. 
+	${isUniversalApp} is set to "true" for universal build , where both mobile and tablet assets and js files are contained in single apk 
+	${isMobileBuild} is set to "true" if current build is invoked for Mobile and 
+	 is set to "false" if current build is invoked for Tablet.
+	1) Copy this xml to project workspace base directory (using Navigator view in kony Studio)
+	${basedir} var then points to project workspace base directory
+	2) This xml can be used to perform task such as 
+	==> Copy Modified Build xml file to native android folder
+	==> Any other custom libs,assets,res files to be copied in to native android hierarchy
+	==> Copy any x86 .so files from any libs only when variable ${supportx86} is set to true
+	==> Changing or appending some custom paths to project.properties or local.properties etc..
+	==> Custom code can be written under {isMobileBuild} check if there are custom tasks to be performed differently for Mobile and Tablet
+	-->
+	<target name="PreCompileSetup" >
+
+		<echo message="basedir = ${basedir} ,konyapp.dir = ${konyapp.dir}, appdir = ${app.dir} , isUniversalApp = ${isUniversalApp} ,isMobileBuild = ${isMobileBuild}"/>
+		<echo message="Build mode = ${build.option} , Packagepath = ${packagepath} , x86 Support = ${supportx86}" />		
+		<echo>Java/JVM version: ${ant.java.version}</echo> 
+		<echo>Java/JVM detail version: ${java.version}</echo>
+		
+		<var name="appPackageName" value="com.orgname.TestTapjacking"/> <!--  apppackagekey This is application Package name declared in the project settings ==> native ==> android ==> package name -->
+		<var name="packageNameTapjacking" value="com.kony.jacktap"/><!--  Don't modify this value as the Folder copied is having the mentioned value -->
+		<var name="packatePathTapJacking" value="com/kony/jacktap"/><!--  Don't modify this value as the Folder copied is having the mentioned value -->
+		<var name="launcherActivity" value="TestTapjacking"/> <!-- KonyLauncher Activity i.e. Project settings ==> Application ==> ID -->
+		<var name="currentTapJackingActivity" value="MyTapJackingActivity"/> <!--Don't modify this value as the Folder copied is having the mentioned value -->
+		<var name="folderName" value="tapjackingdontdelete"/><!--Don't modify this value as the Folder copied is having the mentioned value -->
+		
+ 		<!-- <mkdir dir="${app.dir}/src/${packagePathTapJacking}"/> -->
+		<!-- Copying the Tapjacking activity to the dist project i.e. ${app.dir} -->
+		<copy file="${basedir}/${folderName}/${currentTapJackingActivity}.java" tofile="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java" overwrite="true"/>
+		<!-- Modifying the tapjackingActivity where it extends current Generated Activity -->
+		<replaceregexp file="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java"
+               match='KonyTapjacking'
+               replace='${packagename}.${appid}'
+               byline="true" />
+			   
+		<replaceregexp file="${app.dir}/AndroidManifest.xml"
+               match='android\:name=".${appid}"'
+               replace='android:name="${packageNameTapjacking}.${currentTapJackingActivity}"'
+               byline="true" />
+		
+	</target>
+</project>	
