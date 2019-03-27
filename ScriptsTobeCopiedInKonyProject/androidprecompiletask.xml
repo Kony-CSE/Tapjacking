@@ -25,18 +25,13 @@
 		<echo>Java/JVM version: ${ant.java.version}</echo> 
 		<echo>Java/JVM detail version: ${java.version}</echo>
 		
-		<var name="appPackageName" value="com.orgname.TestTapjacking"/> <!--  apppackagekey This is application Package name declared in the project settings ==> native ==> android ==> package name -->
-		<var name="packageNameTapjacking" value="com.kony.jacktap"/><!--  Don't modify this value as the Folder copied is having the mentioned value -->
-		<var name="packatePathTapJacking" value="com/kony/jacktap"/><!--  Don't modify this value as the Folder copied is having the mentioned value -->
-		<var name="launcherActivity" value="TestTapjacking"/> <!-- KonyLauncher Activity i.e. Project settings ==> Application ==> ID -->
-		<var name="currentTapJackingActivity" value="MyTapJackingActivity"/> <!--Don't modify this value as the Folder copied is having the mentioned value -->
 		<var name="folderName" value="tapjackingdontdelete"/><!--Don't modify this value as the Folder copied is having the mentioned value -->
 		
  		<!-- <mkdir dir="${app.dir}/src/${packagePathTapJacking}"/> -->
 		<!-- Copying the Tapjacking activity to the dist project i.e. ${app.dir} -->
-		<copy file="${basedir}/${folderName}/${currentTapJackingActivity}.java" tofile="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java" overwrite="true"/>
+		<!-- <copy file="${basedir}/${folderName}/${currentTapJackingActivity}.java" tofile="${app.dir}/src/${packatePathTapJacking}/${appid}.java" overwrite="true"/> -->
 		<!-- Modifying the tapjackingActivity where it extends current Generated Activity -->
-		<replaceregexp file="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java"
+		<!-- <replaceregexp file="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java"
                match='KonyTapjacking'
                replace='${packagename}.${appid}'
                byline="true" />
@@ -44,7 +39,24 @@
 		<replaceregexp file="${app.dir}/AndroidManifest.xml"
                match='android\:name=".${appid}"'
                replace='android:name="${packageNameTapjacking}.${currentTapJackingActivity}"'
-               byline="true" />
+               byline="true" /> -->
+			   
+			   
+			   
+	
+	<copy file="${basedir}/${folderName}/APPID.java" tofile="${app.dir}/src/${packagepath}/${appid}.java" overwrite="true"/>
+	<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$PACKAGE" value="${package}"/>
+    <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APPID" value="${appid}"/>
+	
+	<if>
+		<equals arg1="${build.option}" arg2="debug"/>
+		 <then>
+			<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="1"/>
+		 </then>
+		 <else>
+		 <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="2"/>
+		 </else>
+	</if>
 		
 	</target>
 </project>	
