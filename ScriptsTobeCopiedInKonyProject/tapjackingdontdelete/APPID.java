@@ -50,7 +50,7 @@ public class $APPID extends KonyMain {
         String query = intent.getStringExtra(SearchManager.QUERY);
         String extraData = intent.getStringExtra("intent_extra_data_key");
         SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
-          TestTapjackingSearchSuggestionProvider.AUTHORITY, TestTapjackingSearchSuggestionProvider.MODE);
+          $PROVIDER.AUTHORITY, $PROVIDER.MODE);
         suggestions.saveRecentQuery(query, extraData);
         SearchDataAdapter.getInstance().raiseOnDoneCallback(query,extraData);
        }
