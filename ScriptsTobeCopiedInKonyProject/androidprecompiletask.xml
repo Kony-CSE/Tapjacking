@@ -1,17 +1,20 @@
 <project name="PreCompile" default="PreCompileSetup">
 	<!--
 	${basedir} points to the current dir in which this xml is present
-	${konyapp.dir} points to kony application base directory
 	${app.dir} points to Native android application directory created for the current kony app
 	${packagepath} contains the package name folder path relative to src folder
 	${build.option} indicates current build is "debug" or "release" mode
 	${supportx86} is set to "true" if x86 flag is ticked in IDE build options. 
-	${isUniversalApp} is set to "true" for universal build , where both mobile and tablet assets and js files are contained in single apk 
 	${isMobileBuild} is set to "true" if current build is invoked for Mobile and 
 	 is set to "false" if current build is invoked for Tablet.
 	1) Copy this xml to project workspace base directory (using Navigator view in kony Studio)
 	${basedir} var then points to project workspace base directory
 	2) This xml can be used to perform task such as 
+	==> Overwrite generated Main Activity java file with modified file in ${app.dir}\src\${packagepath}\ folder .
+	Note: When overwriting generated activity file please follow below steps.
+	a) Compile the application in both release and debug modes
+	b) Individually modify both version of Main Activity files and maintain them seperately to overwrite in script
+	Above steps are needed as the Main Activity file generated in debug and release mode differs in certain functions or parameters
 	==> Copy Modified Build xml file to native android folder
 	==> Any other custom libs,assets,res files to be copied in to native android hierarchy
 	==> Copy any x86 .so files from any libs only when variable ${supportx86} is set to true
@@ -20,43 +23,26 @@
 	-->
 	<target name="PreCompileSetup" >
 
-		<echo message="basedir = ${basedir} ,konyapp.dir = ${konyapp.dir}, appdir = ${app.dir} , isUniversalApp = ${isUniversalApp} ,isMobileBuild = ${isMobileBuild}"/>
-		<echo message="Build mode = ${build.option} , Packagepath = ${packagepath} , x86 Support = ${supportx86}" />		
-		<echo>Java/JVM version: ${ant.java.version}</echo> 
-		<echo>Java/JVM detail version: ${java.version}</echo>
-		
-		<var name="folderName" value="tapjackingdontdelete"/><!--Don't modify this value as the Folder copied is having the mentioned value -->
-		
- 		<!-- <mkdir dir="${app.dir}/src/${packagePathTapJacking}"/> -->
-		<!-- Copying the Tapjacking activity to the dist project i.e. ${app.dir} -->
-		<!-- <copy file="${basedir}/${folderName}/${currentTapJackingActivity}.java" tofile="${app.dir}/src/${packatePathTapJacking}/${appid}.java" overwrite="true"/> -->
-		<!-- Modifying the tapjackingActivity where it extends current Generated Activity -->
-		<!-- <replaceregexp file="${app.dir}/src/${packatePathTapJacking}/${currentTapJackingActivity}.java"
-               match='KonyTapjacking'
-               replace='${packagename}.${appid}'
-               byline="true" />
-			   
-		<replaceregexp file="${app.dir}/AndroidManifest.xml"
-               match='android\:name=".${appid}"'
-               replace='android:name="${packageNameTapjacking}.${currentTapJackingActivity}"'
-               byline="true" /> -->
-			   
-			   
-			   
+		<echo message="basedir = ${basedir} ,appdir = ${app.dir} , isMobileBuild = ${isMobileBuild}"/>
+		<echo message="Build mode = ${build.option} , Packagepath = ${packagepath} , x86 Support = ${supportx86}" />
+		 
+		 <var name="folderName" value="tapjackingdontdelete"/>
+		 <!--Don't modify this value as the Folder copied is having the mentioned value -->	 	      
 	
-	<copy file="${basedir}/${folderName}/APPID.java" tofile="${app.dir}/src/${packagepath}/${appid}.java" overwrite="true"/>
-	<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$PACKAGE" value="${package}"/>
-    <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APPID" value="${appid}"/>
-	
-	<if>
-		<equals arg1="${build.option}" arg2="debug"/>
-		 <then>
-			<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="1"/>
-		 </then>
-		 <else>
-		 <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="2"/>
-		 </else>
-	</if>
+		<copy file="${basedir}/${folderName}/APPID.java" tofile="${app.dir}/src/${packagepath}/${appid}.java" overwrite="true"/>
+		<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$PACKAGE" value="${package}"/>
+	    <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APPID" value="${appid}"/>
+		<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$PROVIDER" value="${appid}SearchSuggestionProvider"/>
 		
+		<if>
+			<equals arg1="${build.option}" arg2="debug"/>
+			 <then>
+				<replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="1"/>
+			 </then>
+			 <else>
+			 <replace file="${app.dir}/src/${packagepath}/${appid}.java" token="$APP_SOURCE_LOC" value="2"/>
+			 </else>
+		</if>
+	  
 	</target>
 </project>	
